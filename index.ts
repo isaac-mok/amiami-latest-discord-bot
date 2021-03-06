@@ -37,8 +37,10 @@ discordClient.on("message", message => {
 
     if (message.content.search("gcode|scode") !== -1) {
         let queryParams = new URLSearchParams(message.content.substr(message.content.search("gcode|scode")).split(/\s+/)[0]);
-        let code = "gcode=" + queryParams.get("gcode");
-        if (code === "gcode=null") {
+        let code;
+        if (queryParams.get("gcode") == null) {
+            code = "gcode=" + queryParams.get("gcode");
+        } else {
             code = "scode=" + queryParams.get("scode");
         }
         axios.get("https://api.amiami.com/api/v1.0/item?" + code + "&lang=eng", {
@@ -59,4 +61,4 @@ discordClient.on("message", message => {
 
 discordClient.login(process.env.DISCORD_TOKEN);
 
-setInterval(() => { update(discordClient, database) }, 180000);
+// setInterval(() => { update(discordClient, database) }, 180000);
