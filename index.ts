@@ -38,7 +38,7 @@ discordClient.on("message", message => {
     if (message.content.search("gcode|scode") !== -1) {
         let queryParams = new URLSearchParams(message.content.substr(message.content.search("gcode|scode")).split(/\s+/)[0]);
         let code = "gcode=" + queryParams.get("gcode");
-        if (code === "gcode=") {
+        if (code === "gcode=null") {
             code = "scode=" + queryParams.get("scode");
         }
         axios.get("https://api.amiami.com/api/v1.0/item?" + code + "&lang=eng", {

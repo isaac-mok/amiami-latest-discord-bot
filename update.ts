@@ -34,17 +34,17 @@ async function send(urlList: Array<String | null>, index: number, discordClient:
 
         if (! item.hasOwnProperty("Item")) {
             itemRepository.set(url);
-        }
 
-        let channels = await channelRepository.all();
-
-        if (channels.hasOwnProperty('Items')) {
-            channels.Items?.forEach(async item => {
-                let channel = await discordClient.channels.fetch(item.channel_id);
-                if (channel.isText()) {
-                    channel.send("https://www.amiami.com" + url);
-                };
-            });
+            let channels = await channelRepository.all();
+    
+            if (channels.hasOwnProperty('Items')) {
+                channels.Items?.forEach(async item => {
+                    let channel = await discordClient.channels.fetch(item.channel_id);
+                    if (channel.isText()) {
+                        channel.send("https://www.amiami.com" + url);
+                    };
+                });
+            }
         }
     }
 
