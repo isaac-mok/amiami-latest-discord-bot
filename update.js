@@ -77,9 +77,8 @@ function send(urlList, index, discordClient, database) {
                     return [4 /*yield*/, itemRepository.get(url)];
                 case 1:
                     item = _b.sent();
-                    if (!item.hasOwnProperty("Item")) {
-                        itemRepository.set(url);
-                    }
+                    if (!!item.hasOwnProperty("Item")) return [3 /*break*/, 3];
+                    itemRepository.set(url);
                     return [4 /*yield*/, channelRepository.all()];
                 case 2:
                     channels = _b.sent();

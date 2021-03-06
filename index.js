@@ -38,8 +38,11 @@ discordClient.on("message", function (message) {
     }
     if (message.content.search("gcode|scode") !== -1) {
         var queryParams = new URLSearchParams(message.content.substr(message.content.search("gcode|scode")).split(/\s+/)[0]);
-        var code = "gcode=" + queryParams.get("gcode");
-        if (code === "gcode=") {
+        var code = void 0;
+        if (queryParams.get("gcode") != null) {
+            code = "gcode=" + queryParams.get("gcode");
+        }
+        else {
             code = "scode=" + queryParams.get("scode");
         }
         axios_1.default.get("https://api.amiami.com/api/v1.0/item?" + code + "&lang=eng", {
@@ -58,4 +61,5 @@ discordClient.on("message", function (message) {
     }
 });
 discordClient.login(process.env.DISCORD_TOKEN);
-setInterval(function () { update_1.default(discordClient, database); }, 180000);
+update_1.default(discordClient, database);
+// setInterval(() => { update(discordClient, database) }, 180000);

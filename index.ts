@@ -38,7 +38,7 @@ discordClient.on("message", message => {
     if (message.content.search("gcode|scode") !== -1) {
         let queryParams = new URLSearchParams(message.content.substr(message.content.search("gcode|scode")).split(/\s+/)[0]);
         let code;
-        if (queryParams.get("gcode") == null) {
+        if (queryParams.get("gcode") != null) {
             code = "gcode=" + queryParams.get("gcode");
         } else {
             code = "scode=" + queryParams.get("scode");
@@ -60,5 +60,7 @@ discordClient.on("message", message => {
 });
 
 discordClient.login(process.env.DISCORD_TOKEN);
+
+update(discordClient, database)
 
 // setInterval(() => { update(discordClient, database) }, 180000);
