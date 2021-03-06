@@ -1,5 +1,8 @@
 import Discord from "discord.js";
 import Database from "./Database";
+import update from "./update";
+import axios from "axios";
+import { JSDOM } from "jsdom";
 require("dotenv").config();
 
 const discordClient = new Discord.Client();
@@ -31,6 +34,29 @@ discordClient.on("message", message => {
                 });
         }
     }
+
+    if (message.content.search("gcode|scode") !== -1) {
+        let queryParams = new URLSearchParams(message.content.substr(message.content.search("gcode|scode")).split(/\s+/)[0]);
+        let code = "gcode=" + queryParams.get("gcode");
+        if (code === "gcode=") {
+            code = "scode=" + queryParams.get("scode");
+        }
+        axios.get("https://api.amiami.com/api/v1.0/item?" + code + "&lang=eng", {
+            headers: {
+                "X-User-Key": "amiami_dev"
+            }
+        })
+            .then(response => {
+                if (response.data.hasOwnProperty("item")) {
+                    let imageUrl = "https://img.amiami.com" + response.data.item.main_image_url;
+                    message.channel.send(imageUrl);
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+    }
 });
 
 discordClient.login(process.env.DISCORD_TOKEN);
+
+setInterval(() => { update(discordClient, database) }, 180000);

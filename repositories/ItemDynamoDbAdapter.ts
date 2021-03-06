@@ -14,7 +14,7 @@ export default class ItemDynamoDbAdapter implements ItemAdapterInterface {
         let params = {
             TableName: this.tableName,
             Item: {
-                item_link: url,
+                url: url,
             }
         }
 
@@ -25,7 +25,7 @@ export default class ItemDynamoDbAdapter implements ItemAdapterInterface {
         let params = {
             TableName: this.tableName,
             Key: {
-                item_link: url,
+                url: url,
             }
         }
 

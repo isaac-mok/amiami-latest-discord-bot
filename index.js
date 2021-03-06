@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var discord_js_1 = __importDefault(require("discord.js"));
 var Database_1 = __importDefault(require("./Database"));
+var update_1 = __importDefault(require("./update"));
+var axios_1 = __importDefault(require("axios"));
 require("dotenv").config();
 var discordClient = new discord_js_1.default.Client();
 var database = new Database_1.default();
@@ -34,5 +36,26 @@ discordClient.on("message", function (message) {
             });
         }
     }
+    if (message.content.search("gcode|scode") !== -1) {
+        var queryParams = new URLSearchParams(message.content.substr(message.content.search("gcode|scode")).split(/\s+/)[0]);
+        var code = "gcode=" + queryParams.get("gcode");
+        if (code === "gcode=") {
+            code = "scode=" + queryParams.get("scode");
+        }
+        axios_1.default.get("https://api.amiami.com/api/v1.0/item?" + code + "&lang=eng", {
+            headers: {
+                "X-User-Key": "amiami_dev"
+            }
+        })
+            .then(function (response) {
+            if (response.data.hasOwnProperty("item")) {
+                var imageUrl = "https://img.amiami.com" + response.data.item.main_image_url;
+                message.channel.send(imageUrl);
+            }
+        }).catch(function (err) {
+            console.error(err);
+        });
+    }
 });
 discordClient.login(process.env.DISCORD_TOKEN);
+setInterval(function () { update_1.default(discordClient, database); }, 180000);

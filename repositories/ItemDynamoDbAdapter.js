@@ -9,7 +9,7 @@ var ItemDynamoDbAdapter = /** @class */ (function () {
         var params = {
             TableName: this.tableName,
             Item: {
-                item_link: url,
+                url: url,
             }
         };
         return this.docClient.put(params).promise();
@@ -18,7 +18,7 @@ var ItemDynamoDbAdapter = /** @class */ (function () {
         var params = {
             TableName: this.tableName,
             Key: {
-                item_link: url,
+                url: url,
             }
         };
         return this.docClient.get(params).promise();
